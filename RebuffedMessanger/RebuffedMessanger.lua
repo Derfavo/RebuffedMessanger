@@ -247,6 +247,13 @@ function M.Receive(event,message,author)
     local contact=getContact(author)
     if not contact then return end
     local outgoing=event=="CHAT_MSG_WHISPER_INFORM"
+    if outgoing then
+        M.lastOutgoing=contact.name
+        if ChatEdit_SetLastToldTarget then ChatEdit_SetLastToldTarget(contact.name) end
+    else
+        M.lastIncoming=contact.name
+        if ChatEdit_SetLastTellTarget then ChatEdit_SetLastTellTarget(contact.name) end
+    end
     contact.messages[#contact.messages+1]={text=message,author=contact.name,outgoing=outgoing,stamp=date("%H:%M")}
     if #contact.messages>MAX_MESSAGES then table.remove(contact.messages,1) end
     local window=contact.detached and M.detached[contact.key] or ensureMain()
@@ -284,6 +291,41 @@ end
 local originalTell=ChatFrame_SendTell
 ChatFrame_SendTell=function(name,...)
     if not M.Open(name,true) and originalTell then return originalTell(name,...) end
+end
+local originalReply,originalReply2=ChatFrame_ReplyTell,ChatFrame_ReplyTell2
+ChatFrame_ReplyTell=function(...)
+    local name=M.lastIncoming or (ChatEdit_GetLastTellTarget and ChatEdit_GetLastTellTarget())
+    if not M.Open(name,true) and originalReply then return originalReply(...) end
+end
+ChatFrame_ReplyTell2=function(...)
+    local name=M.lastOutgoing or (ChatEdit_GetLastToldTarget and ChatEdit_GetLastToldTarget())
+    if not M.Open(name,true) and originalReply2 then return originalReply2(...) end
+end
+local redirecting=false
+local function redirectComposer(editBox)
+    if redirecting or not editBox or not editBox:IsShown() or not editBox:HasFocus()
+        or editBox:GetAttribute("chatType")~="WHISPER" then return end
+    local name=cleanName(editBox:GetAttribute("tellTarget"))
+    local body=editBox:GetText()
+    if not name or body:sub(1,1)=="/" then return end
+    local contact=getContact(name)
+    local window=contact.detached and M.detached[contact.key] or ensureMain()
+    local existing=window.drafts[contact.key]
+    -- Never replace a separate unsent draft with text already composed elsewhere.
+    if body~="" and existing and existing~="" then return end
+    redirecting=true
+    if body~="" then window.drafts[contact.key]=body end
+    editBox:SetText("")
+    if ChatEdit_DeactivateChat then ChatEdit_DeactivateChat(editBox)
+    else editBox:ClearFocus(); editBox:Hide() end
+    M.Open(name,true)
+    redirecting=false
+end
+if hooksecurefunc then
+    if ChatEdit_OnSpacePressed then hooksecurefunc("ChatEdit_OnSpacePressed",redirectComposer) end
+    if ChatEdit_OnTextChanged then
+        hooksecurefunc("ChatEdit_OnTextChanged",function(editBox,userInput) if userInput then redirectComposer(editBox) end end)
+    end
 end
 SLASH_REBUFFEDMESSANGER1="/rmsg"
 SLASH_REBUFFEDMESSANGER2="/messanger"

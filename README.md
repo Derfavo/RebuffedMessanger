@@ -14,7 +14,9 @@ Drag a name out of the list and release it to open a separate window, or click *
 
 Type a message and press Enter or click **Senden / Send**. Escape releases keyboard focus. Messages are sent only when you submit them. Item and other game links remain clickable.
 
-To start a conversation, enter a name in the contact field and click **+**, use `/rmsg Name`, or choose Whisper from the normal player menu. Whispers sent from the standard chat or another addon also appear in the messenger when the server confirms them.
+To start a conversation, enter a name in the contact field and click **+**, use `/rmsg Name`, choose Whisper from the normal player menu, or type `/w Name ` in chat. The normal Reply and Reply-to-last-recipient bindings also open the messenger. Whispers sent from the standard chat or another addon appear in the messenger when the server confirms them.
+
+Typed whisper drafts are moved from the standard chat when the recipient is known. If both interfaces already hold separate nonempty drafts for that recipient, the standard input is left in place so neither draft is overwritten.
 
 ## Commands
 

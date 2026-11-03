@@ -1,7 +1,7 @@
 {
   "addon": "RebuffedMessanger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "interface": 30300,
   "repository": "https://github.com/Derfavo/RebuffedMessanger",
-  "release": "https://github.com/Derfavo/RebuffedMessanger/releases/tag/v1.0.0"
+  "release": "https://github.com/Derfavo/RebuffedMessanger/releases/tag/v1.0.1"
 }

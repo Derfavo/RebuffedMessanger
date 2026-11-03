@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- Open the messenger from the normal Reply and Reply-to-last-recipient bindings.
+- Move normal /w composition into the messenger when its recipient is known.
+- Preserve both drafts when the standard chat and messenger already contain different unsent text.
+
 ## 1.0.0
 
 - Add a shared contact list for incoming and outgoing whispers.
