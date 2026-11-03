@@ -6,6 +6,8 @@ A separate whisper interface for WoW 3.3.5a, with a shared contact list and deta
 
 Close WoW, copy the `RebuffedMessanger` folder into `Interface/AddOns/`, then restart the game and enable the addon. No other addons are required.
 
+The shared window is 520 × 300 UI pixels, and detached conversations are 360 × 250. The contact list scrolls when more than eight conversations are attached.
+
 ## Conversations
 
 Incoming whispers open the messenger without taking keyboard focus. Click a name in the left-hand list to switch conversations. Unread messages in other conversations are counted next to the name.

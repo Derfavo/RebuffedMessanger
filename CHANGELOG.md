@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+- Make the shared window and detached conversations substantially smaller.
+- Use a narrower contact list, eight visible contacts and tighter spacing.
+- Keep text readable and scroll the contact list when needed.
+
 ## 1.0.1
 
 - Open the messenger from the normal Reply and Reply-to-last-recipient bindings.

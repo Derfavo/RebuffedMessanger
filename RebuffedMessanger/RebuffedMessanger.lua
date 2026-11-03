@@ -1,7 +1,7 @@
 local M = {contacts = {}, order = {}, detached = {}}
 RebuffedMessanger = M
 local main, refreshList, createWindow, render, selectContact
-local VISIBLE, ROW_HEIGHT, MAX_MESSAGES = 11, 23, 150
+local VISIBLE, ROW_HEIGHT, MAX_MESSAGES = 8, 22, 150
 local german = GetLocale() == "deDE"
 local function text(de, en) return german and de or en end
 local function cleanName(name)
@@ -57,7 +57,7 @@ render = function(window)
 end
 local function button(parent, label, width, point, relative, relativePoint, x, y, click)
     local b = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
-    b:SetWidth(width); b:SetHeight(22); b:SetPoint(point,relative,relativePoint,x,y)
+    b:SetWidth(width); b:SetHeight(20); b:SetPoint(point,relative,relativePoint,x,y)
     b:SetText(label); b:SetScript("OnClick",click)
     return b
 end
@@ -80,7 +80,7 @@ end
 createWindow = function(positionKey, isMain)
     local window = CreateFrame("Frame", isMain and "RebuffedMessangerMain" or nil, UIParent)
     window.positionKey, window.drafts = positionKey, {}
-    window:SetWidth(isMain and 690 or 460); window:SetHeight(isMain and 390 or 320)
+    window:SetWidth(isMain and 520 or 360); window:SetHeight(isMain and 300 or 250)
     window:SetFrameStrata("DIALOG"); window:SetToplevel(true); window:SetClampedToScreen(true)
     window:SetMovable(true); window:EnableMouse(true)
     window:SetBackdrop({bgFile="Interface\\DialogFrame\\UI-DialogBox-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,tileSize=16,edgeSize=16,insets={left=4,right=4,top=4,bottom=4}})
@@ -96,27 +96,27 @@ createWindow = function(positionKey, isMain)
         if isMain then window:Hide() elseif window.contact then M.Attach(window.contact,false) end
     end)
     window.target = window:CreateFontString(nil,"OVERLAY","GameFontNormal")
-    local left = isMain and 190 or 15
-    window.target:SetPoint("TOPLEFT",left,-42); window.target:SetWidth(isMain and 340 or 295); window.target:SetJustifyH("LEFT")
-    window.moveButton = button(window,isMain and text("Abtrennen","Detach") or text("Andocken","Attach"),100,"TOPRIGHT",window,"TOPRIGHT",-12,-36,function()
+    local left = isMain and 155 or 15
+    window.target:SetPoint("TOPLEFT",left,-38); window.target:SetWidth(isMain and 235 or 205); window.target:SetJustifyH("LEFT")
+    window.moveButton = button(window,isMain and text("Abtrennen","Detach") or text("Andocken","Attach"),90,"TOPRIGHT",window,"TOPRIGHT",-12,-33,function()
         if not window.contact then return end
         if isMain then M.Detach(window.contact) else M.Attach(window.contact,true) end
     end)
     window.messages = CreateFrame("ScrollingMessageFrame",nil,window)
-    window.messages:SetPoint("TOPLEFT",left,-70); window.messages:SetPoint("BOTTOMRIGHT",-17,52)
+    window.messages:SetPoint("TOPLEFT",left,-62); window.messages:SetPoint("BOTTOMRIGHT",-12,46)
     window.messages:SetFontObject("ChatFontNormal"); window.messages:SetJustifyH("LEFT")
     window.messages:SetFading(false); window.messages:SetMaxLines(MAX_MESSAGES)
     window.messages:EnableMouse(true); window.messages:EnableMouseWheel(true); window.messages:SetHyperlinksEnabled(true)
     window.messages:SetScript("OnMouseWheel",function(self,delta) if delta>0 then self:ScrollUp() else self:ScrollDown() end end)
     window.messages:SetScript("OnHyperlinkClick",function(self,link,label,mouse) SetItemRef(link,label,mouse,DEFAULT_CHAT_FRAME) end)
     window.input = CreateFrame("EditBox",nil,window,"InputBoxTemplate")
-    window.input:SetPoint("BOTTOMLEFT",left+5,17); window.input:SetPoint("BOTTOMRIGHT",-95,17)
-    window.input:SetHeight(24); window.input:SetFontObject("ChatFontNormal")
+    window.input:SetPoint("BOTTOMLEFT",left+5,15); window.input:SetPoint("BOTTOMRIGHT",-83,15)
+    window.input:SetHeight(22); window.input:SetFontObject("ChatFontNormal")
     window.input:SetAutoFocus(false); window.input:SetMaxLetters(255)
     window.input:SetScript("OnEnterPressed",function() sendInput(window) end)
     window.input:SetScript("OnEscapePressed",function(self) self:ClearFocus() end)
     window.input:SetScript("OnTextChanged",function(self) if window.contact then window.drafts[window.contact] = self:GetText() end end)
-    window.send = button(window,text("Senden","Send"),70,"BOTTOMRIGHT",window,"BOTTOMRIGHT",-14,18,function() sendInput(window) end)
+    window.send = button(window,text("Senden","Send"),60,"BOTTOMRIGHT",window,"BOTTOMRIGHT",-12,16,function() sendInput(window) end)
     window:SetScript("OnHide",function() window.input:ClearFocus() end)
     restorePosition(window); window:Hide()
     return window
@@ -126,17 +126,17 @@ local function ensureMain()
     main = createWindow("main",true)
     M.main = main
     local caption = main:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall")
-    caption:SetPoint("TOPLEFT",16,-42); caption:SetText(text("Neues Gespräch:","New conversation:"))
+    caption:SetPoint("TOPLEFT",14,-38); caption:SetText(text("Neues Gespräch:","New conversation:"))
     local nameInput = CreateFrame("EditBox",nil,main,"InputBoxTemplate")
-    nameInput:SetPoint("TOPLEFT",22,-65); nameInput:SetWidth(112); nameInput:SetHeight(22)
+    nameInput:SetPoint("TOPLEFT",20,-58); nameInput:SetWidth(90); nameInput:SetHeight(22)
     nameInput:SetAutoFocus(false); nameInput:SetFontObject("ChatFontNormal"); nameInput:SetMaxLetters(64)
     local function openName() M.Open(nameInput:GetText(),true); nameInput:ClearFocus() end
     nameInput:SetScript("OnEnterPressed",openName)
     nameInput:SetScript("OnEscapePressed",function(self) self:ClearFocus() end)
     main.newName = nameInput
-    button(main,"+",28,"TOPLEFT",main,"TOPLEFT",143,-65,openName)
+    button(main,"+",24,"TOPLEFT",main,"TOPLEFT",117,-58,openName)
     main.list = CreateFrame("ScrollFrame","RebuffedMessangerContactsScroll",main,"FauxScrollFrameTemplate")
-    main.list:SetPoint("TOPLEFT",14,-101); main.list:SetWidth(146); main.list:SetHeight(VISIBLE*ROW_HEIGHT)
+    main.list:SetPoint("TOPLEFT",12,-90); main.list:SetWidth(122); main.list:SetHeight(VISIBLE*ROW_HEIGHT)
     main.list:SetScript("OnVerticalScroll",function(self,offset) FauxScrollFrame_OnVerticalScroll(self,offset,ROW_HEIGHT,refreshList) end)
     main.list:EnableMouseWheel(true)
     main.list:SetScript("OnMouseWheel",function(self,delta)
@@ -147,8 +147,8 @@ local function ensureMain()
     main.rows = {}
     for index=1,VISIBLE do
         local row=CreateFrame("Button",nil,main)
-        row:SetWidth(151); row:SetHeight(ROW_HEIGHT)
-        row:SetPoint("TOPLEFT",16,-101-(index-1)*ROW_HEIGHT)
+        row:SetWidth(120); row:SetHeight(ROW_HEIGHT)
+        row:SetPoint("TOPLEFT",14,-90-(index-1)*ROW_HEIGHT)
         row:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
         row.label=row:CreateFontString(nil,"OVERLAY","GameFontHighlightSmall")
         row.label:SetAllPoints(); row.label:SetJustifyH("LEFT")
