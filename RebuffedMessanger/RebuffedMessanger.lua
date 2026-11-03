@@ -81,7 +81,7 @@ createWindow = function(positionKey, isMain)
     local window = CreateFrame("Frame", isMain and "RebuffedMessangerMain" or nil, UIParent)
     window.positionKey, window.drafts = positionKey, {}
     window:SetWidth(isMain and 690 or 460); window:SetHeight(isMain and 390 or 320)
-    window:SetFrameStrata("DIALOG"); window:SetClampedToScreen(true)
+    window:SetFrameStrata("DIALOG"); window:SetToplevel(true); window:SetClampedToScreen(true)
     window:SetMovable(true); window:EnableMouse(true)
     window:SetBackdrop({bgFile="Interface\\DialogFrame\\UI-DialogBox-Background",edgeFile="Interface\\Tooltips\\UI-Tooltip-Border",tile=true,tileSize=16,edgeSize=16,insets={left=4,right=4,top=4,bottom=4}})
     window:SetBackdropColor(0.04,0.05,0.08,0.96)
