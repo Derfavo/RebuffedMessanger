@@ -1,0 +1,12 @@
+## Interface: 30300
+## Title: RebuffedMessanger
+## Notes: Tabbed whisper conversations with detachable chat windows.
+## Notes-deDE: Fluestergespraeche mit Kontaktliste und abtrennbaren Fenstern.
+## Author: Derfavo
+## Version: 1.0.0
+## X-Release-Date: 20261103
+## SavedVariablesPerCharacter: RebuffedMessangerDB
+## SavedVariables: RebuffedMessangerVersionDB
+
+RebuffedMessanger.lua
+VersionCheck.lua
