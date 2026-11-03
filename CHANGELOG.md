@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3
+
+- Reduce the shared window to 430 × 240 and detached conversations to 300 × 200 UI pixels.
+- Tighten the controls and show six contacts at a time, with scrolling for the rest.
+
 ## 1.0.2
 
 - Make the shared window and detached conversations substantially smaller.

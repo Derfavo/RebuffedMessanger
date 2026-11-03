@@ -3,7 +3,7 @@
 ## Notes: Tabbed whisper conversations with detachable chat windows.
 ## Notes-deDE: Fluestergespraeche mit Kontaktliste und abtrennbaren Fenstern.
 ## Author: Derfavo
-## Version: 1.0.2
+## Version: 1.0.3
 ## X-Release-Date: 20261103
 ## SavedVariablesPerCharacter: RebuffedMessangerDB
 ## SavedVariables: RebuffedMessangerVersionDB
